@@ -39,13 +39,8 @@ fn validate_email(email: &str) -> bool {
     let email_regex = Regex::new("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").unwrap();
 
     let email_is_valid = email_regex.is_match(email);
-    let tld = email
-        .split(".")
-        .collect::<Vec<&str>>()
-        .last()
-        .unwrap_or(&"")
-        .to_owned();
-    let email_has_valid_tld = validate_tld(&tld);
+    let tld = email.split('.').last().unwrap_or("");
+    let email_has_valid_tld = validate_tld(tld);
 
     email_is_valid && email_has_valid_tld
 }
@@ -62,7 +57,7 @@ fn validate_tld(tld: &str) -> bool {
 mod tests {
     #[test]
     fn validate_email() {
-        const CASES: &'static [(&'static str, bool)] = &[
+        const CASES: &'static [(&str, bool)] = &[
             ("test.aaaa@test.com.ee", true),
             ("test.aaaa@test.com", true),
             ("test@test.com", true),
